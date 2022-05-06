@@ -1,0 +1,29 @@
+  public bool UsuarioEsAdministrador(SPListItem item)
+        {
+            bool esAdministrador = false;
+
+            if (item["Author"] != null)
+            {
+                SPFieldUserValue author = new SPFieldUserValue(item.Web, item["Author"].ToString());
+
+                if (author.User.ID == usuarioLogueado.ID)
+                {
+                    esAdministrador = true;
+                }
+            }
+
+            if (esAdministrador == false && item["Administradores"] != null)
+            {
+                SPFieldUserValueCollection administradores = new SPFieldUserValueCollection(item.Web, item["Administradores"].ToString());
+
+                foreach (SPFieldUserValue administrador in administradores)
+                {
+                    if (administrador.User.ID == usuarioLogueado.ID)
+                    {
+                        esAdministrador = true;
+                    }
+                }
+            }
+
+            return esAdministrador;
+        }
